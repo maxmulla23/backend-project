@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  User       User[]
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  firstname  String
+  lastname   String
+  password   String
+  email      String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  roleId  Int
+  House   House[]
+  Issue   Issue[]
+  Payment Payment[]
+}
+
+model Property {
+  id         Int      @id @default(autoincrement())
+  name       String
+  location   String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  House      House[]
+}
+
+model House {
+  id           Int       @id @default(autoincrement())
+  house_number String
+  property     Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  tenant       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now())
+  propertyId   Int
+  userId       Int?
+  Issue        Issue[]
+  Payment      Payment[]
+}
+
+model Issue {
+  id      Int    @id @default(autoincrement())
+  title   String
+  owner   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  house   House  @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  userId  Int
+  houseId Int
+}
+
+model Payment {
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  tenant     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  house      House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+
+  userId  Int
+  houseId Int
+}
