@@ -32,6 +32,7 @@ model User {
   House   House[]
   Issue   Issue[]
   Payment Payment[]
+  Lease   Lease[]
 }
 
 model Property {
@@ -54,11 +55,13 @@ model House {
   userId       Int?
   Issue        Issue[]
   Payment      Payment[]
+  Lease        Lease[]
 }
 
 model Issue {
   id      Int    @id @default(autoincrement())
   title   String
+  description String
   owner   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   house   House  @relation(fields: [houseId], references: [id], onDelete: Cascade)
   userId  Int
@@ -75,4 +78,17 @@ model Payment {
 
   userId  Int
   houseId Int
+}
+
+model Lease {
+  id Int @id @default(autoincrement())
+  startdate DateTime 
+  house House @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  tenant     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  description String
+  enddate DateTime
+
+  userId  Int
+  houseId Int
+
 }

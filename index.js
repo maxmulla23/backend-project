@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use("/auth", require("./routes/auth.routes"))
 app.use("/house", require("./routes/house.routes"))
+app.use("/issue", require("./routes/issue.routes"))
+app.use("/lease", require("./routes/lease.route"))
 // app.use("/api/games", require("./routes/games.routes"));
 // app.use("/api/payments", require("./routes/payments.routes"));
 
