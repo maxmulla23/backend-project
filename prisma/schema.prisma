@@ -33,6 +33,7 @@ model User {
   Issue   Issue[]
   Payment Payment[]
   Lease   Lease[]
+  
 }
 
 model Property {
@@ -42,6 +43,8 @@ model Property {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   House      House[]
+  Notice     Notice[]
+  News       News[]
 }
 
 model House {
@@ -56,16 +59,20 @@ model House {
   Issue        Issue[]
   Payment      Payment[]
   Lease        Lease[]
+  
 }
 
 model Issue {
-  id      Int    @id @default(autoincrement())
-  title   String
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  owner   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  house   House  @relation(fields: [houseId], references: [id], onDelete: Cascade)
-  userId  Int
-  houseId Int
+  response    String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  owner       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  house       House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  userId      Int
+  houseId     Int
 }
 
 model Payment {
@@ -81,14 +88,36 @@ model Payment {
 }
 
 model Lease {
-  id Int @id @default(autoincrement())
-  startdate DateTime 
-  house House @relation(fields: [houseId], references: [id], onDelete: Cascade)
-  tenant     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
+  startdate   DateTime
+  house       House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  tenant      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   description String
-  enddate DateTime
+  enddate     DateTime
 
   userId  Int
   houseId Int
+}
 
+model Notice {
+  id  Int @id @default(autoincrement())
+  title String 
+  description String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  apartment   Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  userId      Int
+  propertyId     Int
+}
+
+model News {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  propertyId Int
 }

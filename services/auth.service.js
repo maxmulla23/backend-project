@@ -16,6 +16,9 @@ exports.checkIfExists = async (email) => {
       password: true,
       email: true,
       roleId: true,
+      role: true,
+      House: true,
+      
     },
   });
 };
